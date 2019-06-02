@@ -48,16 +48,17 @@ _start:     push        rbp
             mov         rbp, rsp
             xor         rcx, rcx
             mov         r9, 10
-            rdrand      rax 
-            cmp         rax, 0      ; RDRAND can generate negative values
-            jge         .get_digit  ; For now I'm just taking the absolute value
-            imul        rax, -1     ; Otherwise, the program crashes with a SIGFPE
+.get_rand:  rdrand      rax
+            cmp         rax, 0
+            je          .get_rand
+            jg          .get_digit
+            imul        rax, -1
 .get_digit: cmp         rax, 0
             jz          .print
             inc         rcx
             xor         rdx, rdx
             div         r9
-            add         rdx, 48         ; Convert to ASCII
+            add         rdx, 48     ; Convert to ASCII
             push        rdx
             jmp         .get_digit
 .print:     jrcxz       .final_nl
@@ -68,7 +69,7 @@ _start:     push        rbp
             push        rcx
             syscall
             pop         rcx
-            pop         rax             ; Dump into garbage register
+            pop         rax         ; Dump into garbage register
             dec         rcx
             jmp         .print
 .final_nl:  mov         rax, 1
@@ -76,8 +77,8 @@ _start:     push        rbp
             mov         rsi, nl
             mov         rdx, 1
             syscall
-            pop         rbp
+.call_exit: pop         rbp
             mov         rbp, rsp
-.call_exit: mov         rax, 60
+            mov         rax, 60
             xor         rdi, rdi
             syscall
