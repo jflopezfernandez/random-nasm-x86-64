@@ -34,16 +34,11 @@
 ;
 ;==============================================================================
 
-            extern      printf
-
             SECTION     .data
 ver:        db          "Random - Version 1.1.1", 10, 0
 verlen:     equ         $-ver
-author:     db          "Jose Fernando Lopez Fernandez", 10, 0
+author:     db          "Author: Jose Fernando Lopez Fernandez", 10, 0
 authlen:    equ         $-author
-fmtint:     db          "%ld", 10, 0
-fmtllu:     db          "%llu", 10, 0
-fmtstr:     db          "%s", 10, 0
 
             SECTION     .text
             global      main
@@ -51,10 +46,6 @@ main:       push        rbp
             mov         rbp, rsp
 .get_rnd:   rdrand      rdi
             jnc         .get_rnd
-.print:     mov         rsi, rdi
-            mov         rdi, fmtllu
-            xor         rax, rax
-            call        printf
             pop         rbp
             mov         rbp, rsp
 .call_exit: mov         rax, 60
