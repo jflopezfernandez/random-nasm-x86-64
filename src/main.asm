@@ -34,18 +34,48 @@
 ;
 ;==============================================================================
 
+            global      _start
+
             SECTION     .data
 ver:        db          "Random - Version 1.1.1", 10, 0
 verlen:     equ         $-ver
 author:     db          "Author: Jose Fernando Lopez Fernandez", 10, 0
 authlen:    equ         $-author
+nl:         db          10
 
             SECTION     .text
-            global      main
-main:       push        rbp
+_start:     push        rbp
             mov         rbp, rsp
-.get_rnd:   rdrand      rdi
-            jnc         .get_rnd
+            xor         rcx, rcx
+            mov         r9, 10
+            rdrand      rax 
+            cmp         rax, 0      ; RDRAND can generate negative values
+            jge         .get_digit  ; For now I'm just taking the absolute value
+            imul        rax, -1     ; Otherwise, the program crashes with a SIGFPE
+.get_digit: cmp         rax, 0
+            jz          .print
+            inc         rcx
+            xor         rdx, rdx
+            div         r9
+            add         rdx, 48         ; Convert to ASCII
+            push        rdx
+            jmp         .get_digit
+.print:     jrcxz       .final_nl
+            mov         rax, 1
+            mov         rdi, 1
+            mov         rsi, rsp
+            mov         rdx, 1
+            push        rcx
+            syscall
+            pop         rcx
+            pop         rax             ; Dump into garbage register
+            dec         rcx
+            jmp         .print
+.final_nl:  mov         rax, 1
+            mov         rdi, 1
+            mov         rsi, nl
+            mov         rdx, 1
+            syscall
             pop         rbp
             mov         rbp, rsp
 .call_exit: mov         rax, 60

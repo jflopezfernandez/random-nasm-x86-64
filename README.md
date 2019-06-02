@@ -10,3 +10,9 @@ the setup and shutdown code that gcc's `main` function implies. The goal is to
 reduce the size of the executable as much as possible to allow other programs 
 the maximum cache space possible.
 
+## Progress
+
+ * 16,848 bytes functional.
+ * 16,504 bytes functional.
+ *  4,336 bytes  no output.
+ *  8,536 bytes functional. 02 Jun 2019 [2:10 PM]
