@@ -4,7 +4,7 @@ Cryptographically secure, hardware-generated RNG written in NASM x86-64 assembly
 
 ## Overview
 
-The current version on the master branch (<em>version 2.0.0</em>) produces an execuatble 
+The current version on the master branch (<em>version 2.1.0</em>) produces an execuatble 
 <strong>8,536</strong> bytes long. It uses the `printf` function from glibc, as well as all of 
 the setup and shutdown code that gcc's `main` function implies. The goal is to 
 reduce the size of the executable as much as possible to allow other programs 
@@ -50,5 +50,6 @@ The [RDRAND](https://en.wikipedia.org/wiki/RdRand) instruction was introduced by
 
  | Issue ID | Type | Description | Status |
  | -------- | ---- | ----------- | ------ |
- | [Issue #0001](https://github.com/jflopezfernandez/random-nasm-x86-64/issues/1#issue-451221439) | Error | Add check for `RDRAND` return value | [Closed](https://github.com/jflopezfernandez/random-nasm-x86-64/commit/f42b6e4ef2eb77fe6f6a19439fd33b0e7c71cb07) |
- | [Issue #0002](https://github.com/jflopezfernandez/random-nasm-x86-64/issues/2) | Feature | Add invocation args for generating multiple RNs | Open |
+ | [Issue #1](https://github.com/jflopezfernandez/random-nasm-x86-64/issues/1#issue-451221439) | Error | Add check for `RDRAND` return value | [Closed](https://github.com/jflopezfernandez/random-nasm-x86-64/commit/f42b6e4ef2eb77fe6f6a19439fd33b0e7c71cb07) |
+ | [Issue #2](https://github.com/jflopezfernandez/random-nasm-x86-64/issues/2) | Feature | Add invocation args for generating multiple RNs | Open |
+ | [Issue #3](https://github.com/jflopezfernandez/random-nasm-x86-64/issues/3) | Feature | Add invocation arg for printing current application version | Open |
