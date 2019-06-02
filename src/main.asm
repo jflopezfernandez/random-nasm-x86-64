@@ -51,7 +51,7 @@ main:       push        rbp
             mov         rbp, rsp
 .get_rnd:   rdrand      rdi
             jnc         .get_rnd
-            mov         rsi, rdi
+.print:     mov         rsi, rdi
             mov         rdi, fmtllu
             xor         rax, rax
             call        printf
