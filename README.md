@@ -46,6 +46,43 @@ I have not added a `make install` feature yet, but you can literally just copy t
 
 The [RDRAND](https://en.wikipedia.org/wiki/RdRand) instruction was introduced by Intel in 2012 with its Ivy Bridge processors, so as long as your processor is newer than about that time, you should be okay.
 
+I set up a bash script to generate `n` random numbers while I implement the functionality natively, and it looks something like this.
+
+```bash
+#!/bin/sh
+
+if [[ "$#" -ne 1 ]]
+then
+    echo "Usage: rand [n]"
+    exit
+fi
+
+for (( i = 0; i < $1; i++ ))
+do
+    random
+done
+```
+
+Assuming you're still either in the project directory, or `random` is in your `PATH`, you should get something like this:
+
+```
+$ rand
+Usage: rand [n]
+$ rand 10
+8499345643546254815
+2694828518955488459
+8325431899581510166
+8656937487568858518
+1048997955614388542
+6484560130390556974
+2065750195224245233
+4070076239724635225
+8734172364984907491
+4674330604802842582
+```
+
+You can then pipe this output to wherever you need it to go.
+
 # TODO
 
  | Issue ID | Type | Description | Status |
