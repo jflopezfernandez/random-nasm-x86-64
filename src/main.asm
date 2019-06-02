@@ -37,34 +37,26 @@
             extern      printf
 
             SECTION     .data
-ver:        db          "Random - Version 1.0.0", 10, 0
+ver:        db          "Random - Version 1.1.1", 10, 0
 verlen:     equ         $-ver
 author:     db          "Jose Fernando Lopez Fernandez", 10, 0
 authlen:    equ         $-author
-fmt:        db          "%llu", 10, 0
+fmtint:     db          "%ld", 10, 0
+fmtllu:     db          "%llu", 10, 0
+fmtstr:     db          "%s", 10, 0
 
             SECTION     .text
             global      main
 main:       push        rbp
             mov         rbp, rsp
-.version:   mov         rax, 1
-            mov         rdi, 1
-            mov         rsi, ver
-            mov         rdx, verlen
-            syscall
-.author:    mov         rax, 1
-            mov         rdi, 1
-            mov         rsi, author
-            mov         rdx, authlen
-            syscall
-.getrand:   rdrand      rdi
-            jnc         .getrand
+.get_rnd:   rdrand      rdi
+            jnc         .get_rnd
             mov         rsi, rdi
-            mov         rdi, fmt
+            mov         rdi, fmtllu
             xor         rax, rax
             call        printf
             pop         rbp
             mov         rbp, rsp
-            mov         rax, 60
+.call_exit: mov         rax, 60
             xor         rdi, rdi
             syscall
