@@ -48,6 +48,7 @@ The [RDRAND](https://en.wikipedia.org/wiki/RdRand) instruction was introduced by
 
 # TODO
 
- | Issue ID | Description | Status |
- | -------- | ----------- | ------ |
- | [Issue #0001](https://github.com/jflopezfernandez/random-nasm-x86-64/issues/1#issue-451221439) | Add check for `RDRAND` return value | Critical |
+ | Issue ID | Type | Description | Status |
+ | -------- | ---- | ----------- | ------ |
+ | [Issue #0001](https://github.com/jflopezfernandez/random-nasm-x86-64/issues/1#issue-451221439) | Error | Add check for `RDRAND` return value | [Closed](https://github.com/jflopezfernandez/random-nasm-x86-64/commit/f42b6e4ef2eb77fe6f6a19439fd33b0e7c71cb07) |
+ | [Issue #0002](https://github.com/jflopezfernandez/random-nasm-x86-64/issues/2) | Feature | Add invocation args for generating multiple RNs | Open |
