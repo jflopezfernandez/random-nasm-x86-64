@@ -1,5 +1,9 @@
+
 # Prerequisites
 *.d
+
+# Assembly listings
+*.lst
 
 # Object files
 *.o
@@ -35,6 +39,7 @@
 *.i*86
 *.x86_64
 *.hex
+random
 
 # Debug files
 *.dSYM/
@@ -50,3 +55,4 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
