@@ -37,7 +37,7 @@
             global      _start
 
             SECTION     .data
-ver:        db          "Random - Version 1.1.1", 10, 0
+ver:        db          "Random - Version 2.0.0", 10, 0
 verlen:     equ         $-ver
 author:     db          "Author: Jose Fernando Lopez Fernandez", 10, 0
 authlen:    equ         $-author
