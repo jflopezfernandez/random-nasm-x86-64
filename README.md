@@ -81,7 +81,7 @@ $ rand 10
 
 You can then pipe this output to wherever you need it to go.
 
-# TO DO
+# Issues
 
  | Issue ID | Type | Description | Status |
  | -------- | ---- | ----------- | ------ |
