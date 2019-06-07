@@ -58,6 +58,20 @@
 
 ;==============================================================================
 ;
+;                               DATA SECTION
+;
+;==============================================================================
+
+                SECTION .DATA
+
+VERSION_MSG:    DB "Random - Version 3.0.0", 10, 0
+VERSION_LEN:    EQU $-VERSION_MSG
+
+AUTHOR_MSG:     DB "Jose Fernando Lopez Fernandez", 10, 0
+AUTHOR_LEN:     EQU $-AUTHOR_MSG
+
+;==============================================================================
+;
 ;                               TEXT SECTION
 ;
 ;==============================================================================
@@ -65,12 +79,34 @@
                 SECTION .TEXT
                 GLOBAL _start
 
-;            SECTION     .data
-;ver:        db          "Random - Version 2.1.1", 10, 0
-;verlen:     equ         $-ver
-;author:     db          "Author: Jose Fernando Lopez Fernandez", 10, 0
-;authlen:    equ         $-author
-;nl:         db          10
+;==============================================================================
+;
+;                               MAIN
+;
+;==============================================================================
+;
+;   Description:
+;
+;       The main function currently does everything; it generates the
+;       random numbers, parses the arguments, prints new lines, calls
+;       the kernel to exit, etc.
+;
+;   Notes:
+;
+;       The CF = 0 check after generating a random number is critical
+;       to ensure the system really did generate a cryptographically
+;       secure random number. If the Carry Flag is not set after the
+;       random number is generated, it means the system did not have
+;       the necessary entropy to generate a secure random number, the
+;       output should be invalidated, and the function should be 
+;       retried.
+;
+;       Also, the system call return codes are currently not being
+;       checked, which is obviously not good. I'm going to first
+;       implement command-line argument processing, refactor, and then
+;       implement error code checking.
+;
+;------------------------------------------------------------------------------
 
 _start:         POP     RBX                 ; Move argc into RBX
 
