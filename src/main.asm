@@ -62,7 +62,7 @@
 ;
 ;==============================================================================
 
-                SECTION .DATA
+                SECTION .data
 
 VERSION_MSG:    DB "Random - Version 3.0.0", 10, 0
 VERSION_LEN:    EQU $-VERSION_MSG
@@ -76,7 +76,7 @@ AUTHOR_LEN:     EQU $-AUTHOR_MSG
 ;
 ;==============================================================================
 
-                SECTION .TEXT
+                SECTION .text
                 GLOBAL _start
 
 ;==============================================================================
@@ -114,20 +114,76 @@ _start:         POP     RBX                 ; Move argc into RBX
                 ; argument parsing and checking stage.
 
                 CMP     RBX,1               ; test (argc == 1)
-                JE      .GET_RAND           ; If TRUE, skip to .GET_DIGITS
+                JE      .NO_ARGS            ; If TRUE, skip to .GET_DIGITS
 
                 POP     RBX                 ; Overwrite RBX with &argv[0]
 .GET_NEXT_ARG:  POP     RBX                 ; ++argv
                 CMP     RBX,NULL            ; Check if arg == NULL
-                JZ      .GET_RAND           ; If argv = 0, args process. done
+                JE      .GET_RAND           ; If argv = 0, args process. done
 
-                ; Check each argument for valid values and set settings
+                ; TODO: Check each argument for valid values and settings
+
+                ; DEBUG: For now, the first argument will be considered a 
+                ; numerical value containing the number of times a random
+                ; number should be generated and printed.
+                ;
+                ; For example, 'random 10' should generate and print ten
+                ; random numbers.
+
+                ; Convert argument string to numerical value.
+
+.STRTOI:        MOV     AX,DS               ; Initialize AX
+                MOV     ES,AX               ; Initialize ES
+                MOV     RDI,RBX             ; RDI = &argv[i]
+                MOV     RBP,RBX             ; RBP = &argv[i]
+
+                ;--------------------------------------------------------------
+                ; After this block executes:
+                ;
+                ;   RBP = address where string begins
+                ;   RCX = 255 - len (including '\0')
+                ;   RDI = len (including '\0')
+                ;--------------------------------------------------------------
+
+                CLD                         ; Left to right (auto-increment)
+                MOV     RCX,255             ; Max length of string
+                MOV     AL,0                ; Initialize AL with NUL string
+                REPNE   SCASB               ; Scan string until NULL found
+                SUB     RDI,RBP             ; length = end - start
+                DEC     RDI                 ; RDI included NULL terminator
+                XCHG    RDI,R14             ; Move string length to R14
+
+                MOV     R15,10
+                XOR     RAX,RAX             ; Initial value = 0
+.NEXT_VAL:      CMP     RDI,R14
+                JE      .STRTOI_DONE
+                XOR     RCX,RCX
+                MOV     CL,BYTE[RBP+RDI]
+                SUB     RCX,0x30            ; Convert from ASCII
+                XOR     RDX,RDX
+                MUL     R15
+                ADD     RAX,RCX
+                INC     RDI
+                JMP     .NEXT_VAL   
+
+.STRTOI_DONE:   JMP     .GET_RANDS_PREP
+
+.NO_ARGS:       MOV     R14,1               ; Set N = 1
+                XOR     RBX,RBX             ; Set n = 0
+                JMP     .GET_RANDS          ; Skip prep, since N = 0
+
+                ; Prepare to start generating
+
+.GET_RANDS_PREP:MOV     R14,RAX             ; Move N to R14 (non-volatile)
+                XOR     RBX,RBX             ; Initial N = 0
+
+.GET_RANDS:     INC     RBX                 ; Using RBX since it's non-volatile
+
+                ; Generate random number(s)
 
 .GET_RAND:      RDRAND  RAX                 ; Get random number
                 JNC     .GET_RAND           ; If CF=0, result invalid. Repeat.
                 CMP     RAX,0               ; Need to check if positive
-;                JG      .GET_DIGITS         ; If positive, proceed to parse
-;                MUL    RAX,-1               ; Neg value causes SIGFPE
 
                 ; Get each digit using 'MOD 10, DIV 10' algorithm.
 
@@ -143,7 +199,7 @@ _start:         POP     RBX                 ; Move argc into RBX
                 PUSH    RDX                 ; This is the current least sig dig
                 JMP     .GET_DIGIT          ; Loop back to get next digit
 
-.PRINT_DIGIT:   CMP     QWORD[RSP],0        ; TODO: Implement PRINT_DIGIT
+.PRINT_DIGIT:   CMP     QWORD[RSP],0        ; Stop once NULL terminator found
                 JE      .FINISH             ; Found NULL terminator. goto EXIT
                 MOV     RAX,SYSCALL_WRITE
                 MOV     RDI,STDOUT
@@ -153,7 +209,7 @@ _start:         POP     RBX                 ; Move argc into RBX
                 POP     RSI                 ; Remove char off stack after print
                 JMP     .PRINT_DIGIT        ; Go print next char
 
-.FINISH:        POP     RBX                 ; Pop final char from stack
+.FINISH:        POP     R10                 ; Pop final char from stack
 
                 ; Print final newline
 
@@ -163,11 +219,17 @@ _start:         POP     RBX                 ; Move argc into RBX
                 MOV     RSI,RSP             ; 'String' addr: RSP
                 MOV     RDX,1               ; Single char length = 1
                 SYSCALL                     ; Print newline
-                POP     RBX                 ; Pop newline char from stack
+                POP     R10                 ; Pop newline char from stack
+
+                CMP     RBX,R14             ; If N specified, check if done
+                JL      .GET_RANDS          ; If n < N, continue generating
 
                 ; Exit program
 
 .EXIT_SUCCESS:  XOR     RDI,RDI             ; Exit code 0 (EXIT_SUCCESS)
 .EXIT:          MOV     RAX,60              ; Alow JMP to exit with code RDI
                 SYSCALL
+
+.TEST_EXIT:     MOV     RDI,RAX             ; Exit code = last return value
+                JMP     .EXIT
 
