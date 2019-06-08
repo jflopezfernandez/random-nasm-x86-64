@@ -11,11 +11,11 @@ LSTS        = $(patsubst %.o,%.lst,$(OBJS))
 #
 ###############################################################################
 #
-#  AS          = nasm
-#  ASFLAGS     = -gdwarf -f elf64
+AS          = nasm
+ASFLAGS     = -gdwarf -f elf64
 #
-#  LD          = ld
-#  LDFLAGS     = -nostdlib -b elf64-x86-64
+LD          = ld
+LDFLAGS     = -nostdlib -b elf64-x86-64
 #
 ###############################################################################
 
@@ -24,13 +24,15 @@ LSTS        = $(patsubst %.o,%.lst,$(OBJS))
 #                        Release Settings
 #
 ###############################################################################
-
-AS          = nasm
-ASFLAGS     = -f elf64 -Ox 
-
-LD          = ld
-LDFLAGS     = -nostdlib -b elf64-x86-64 --no-dynamic-linker -O --strip-all \
-              --discard-all --reduce-memory-overheads --relax 
+#
+#  AS          = nasm
+#  ASFLAGS     = -f elf64 -Ox 
+#
+#  LD          = ld
+#  LDFLAGS     = -nostdlib -b elf64-x86-64 --no-dynamic-linker -O --strip-all \
+#              --discard-all --reduce-memory-overheads --relax 
+#
+###############################################################################
 
 TARGET      = random
 
