@@ -2,6 +2,9 @@
 vpath %.asm src
 vpath %.inc include
 
+CP          = cp -f -u
+RM          = rm -f
+
 OBJS        = main.o
 LSTS        = $(patsubst %.o,%.lst,$(OBJS))
 
@@ -11,11 +14,11 @@ LSTS        = $(patsubst %.o,%.lst,$(OBJS))
 #
 ###############################################################################
 #
-AS          = nasm
-ASFLAGS     = -gdwarf -f elf64
+#  AS          = nasm
+#  ASFLAGS     = -gdwarf -f elf64
 #
-LD          = ld
-LDFLAGS     = -nostdlib -b elf64-x86-64
+#  LD          = ld
+#  LDFLAGS     = -nostdlib -b elf64-x86-64
 #
 ###############################################################################
 
@@ -25,11 +28,11 @@ LDFLAGS     = -nostdlib -b elf64-x86-64
 #
 ###############################################################################
 #
-#  AS          = nasm
-#  ASFLAGS     = -f elf64 -Ox 
+AS          = nasm
+ASFLAGS     = -f elf64 -Ox 
 #
-#  LD          = ld
-#  LDFLAGS     = -nostdlib -b elf64-x86-64 --no-dynamic-linker -O --strip-all \
+LD          = ld
+LDFLAGS     = -nostdlib -b elf64-x86-64 --no-dynamic-linker -O --strip-all \
 #              --discard-all --reduce-memory-overheads --relax 
 #
 ###############################################################################
@@ -59,4 +62,12 @@ dump:
 .PHONY: clean
 clean:
 	$(RM) $(OBJS) $(LSTS) $(DUMPFILE) $(TARGET)
+
+.PHONY: install
+install: $(TARGET)
+	$(CP) ./$(TARGET) /usr/bin
+
+.PHONY: uninstall
+uninstall:
+	$(RM) /usr/bin/$(TARGET)
 
