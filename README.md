@@ -87,7 +87,7 @@ The following is a plot of a sample run of the program. The program was invoked
 using the command `random 1000`, which results in the sequential generation of
 one thousand random numbers.
 
- ![Generated Random Numbers](https://i.imgur.com/a5M91ZC.png)
+ ![Generated Random Numbers](https://imgur.com/2JoIA1f.png)
 
 In this plot, the <em>n</em>-th random number generated was plotted against its
 position in the output vector (i.e., its index).
