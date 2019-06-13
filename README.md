@@ -81,6 +81,21 @@ $ rand 10
 
 You can then pipe this output to wherever you need it to go.
 
+# Randomness
+
+The following is a plot of a sample run of the program. The program was invoked
+using the command `random 1000`, which results in the sequential generation of
+one thousand random numbers.
+
+ ![Generated Random Numbers](https://i.imgur.com/a5M91ZC.png)
+
+In this plot, the <em>n</em>-th random number generated was plotted against its
+position in the output vector (i.e., its index).
+
+The generated data used for the plot is publicly accessible and may be
+downloaded using [this
+link](https://gist.github.com/jflopezfernandez/4234eba587925cb9daee89d660f6d9da).
+
 # Issues
 
  | Issue ID | Type | Description | Status |
