@@ -4,9 +4,11 @@ Cryptographically secure, hardware-generated random number provider-interface wr
 
 ## Overview
 
-The current version on the master branch (<em>version 2.1.0</em>) produces an executable <strong>8,536</strong> bytes long. It initially used the `printf` function by calling GCC and linking with glibc, which meant an unfortunate amount of size bloat because of all of the setup, shutdown, and miscellaneous helper code that gcc's `main` function and linking to the standard library imply. The goal is to reduce the size of the executable as much as possible to allow other programs the maximum cache space possible, while providing an extremely lightweight, low-memory footprint interface for generating cryptographically secure, statistically uniform random numbers.
+The current version on the master branch (<em>version 3.0.1</em>) produces an executable <strong>8,528</strong> bytes long. It initially used the `printf` function by calling GCC and linking with glibc, which meant an unfortunate amount of size bloat because of all of the setup, shutdown, and miscellaneous helper code that gcc's `main` function and linking to the standard library imply. The goal is to reduce the size of the executable as much as possible to allow other programs the maximum cache space possible, while providing an extremely lightweight, low-memory footprint interface for generating cryptographically secure, statistically uniform random numbers.
 
 The current version does not use the C Standard Library at all; instead, writing to standard output is done directly via system calls by writing everything in x86-64 assembly. The application currently returns an unsigned long long integer (64 bits) which it prints to standard output, but eventually the goal is to allow for minimum and maximum parameters to be set, as well as querying the interface for a specific number of outputs instead of having to call it for one at a time.
+
+My plan at the moment is still to write the program in assembly language, but then manually edit the binary to change the location of the section headers and text section, as most of the executable at the moment is just empty space, which is an absolute waste. As an aside, the makefile has the `--strip-all` option specified, but for some reason it isn't actually doing it, so I appended a call to the `stip` utility to explicitly do it, and the program is now actually being stripped of its static symbol tables, so even with the added functionality of the rudimentary command-line option parsing, the new version of the program is actually eight (8) bytes smaller, so that was pretty cool.
 
 ## Progress
 
@@ -16,6 +18,7 @@ The current version does not use the C Standard Library at all; instead, writing
  | 16,504 bytes    | Functional | 02 Jun 2019 | Stripped debug symbols, removed superfluous code |
  | 4,336 bytes     | No Output  | 02 Jun 2019 | Removed gcc helper code completely, no glibc, printf, etc. |
  | 8,536 bytes     | Functional | 02 Jun 2019 | Correctly outputting cryptographically secure, hardware-generated random numbers with no calls to glibc |
+ | 8,528 bytes     | Functional | 16 Jun 2019 | Added rudimentary argument parsing, still experimental |
 
 <hr />
 

@@ -47,6 +47,7 @@ all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(LD) $(LDFLAGS) -o $@ $^
+	strip --strip-all ./$(TARGET)
 
 %.o: %.asm
 	$(AS) $(ASFLAGS) -o $@ $^

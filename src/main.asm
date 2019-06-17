@@ -64,7 +64,7 @@
 
                 SECTION .data
 
-VERSION_MSG:    DB "Random - Version 3.0.0", 10, 0
+VERSION_MSG:    DB "Random - Version 3.0.1", 10, 0
 VERSION_LEN:    EQU $-VERSION_MSG
 
 AUTHOR_MSG:     DB "Jose Fernando Lopez Fernandez", 10, 0
